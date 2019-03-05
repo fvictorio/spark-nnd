@@ -1,0 +1,9 @@
+.idea/
+
+target
+
+metastore_db/
+
+derby.log
+r-packages/
+logs/
