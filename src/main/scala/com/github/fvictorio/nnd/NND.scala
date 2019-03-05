@@ -59,8 +59,8 @@ private case class VertexAttributes(a1: SetAttribute, a2: IncSearchAttribute, a3
 private case class ValueVertexWithoutFeatures(id: Long, similarity: Double, attributes: VertexAttributes) extends ValueVertex with VertexToString
 private case class ValueVertexWithFeatures(id: Long, similarity: Double, attributes: VertexAttributes, features: Vector, partition: Long) extends ValueVertex with VertexToString
 
-case class Node(features: Vector, label: Option[Long], partition: Long = 0)
-case class NodeWithNeighbors(features: Vector, label: Option[Long], neighbors: Seq[(Long, Double)], partition: Long)
+case class Node(features: Vector, label: Option[Long], partition: Long = 0, finished: Boolean = false)
+case class NodeWithNeighbors(features: Vector, label: Option[Long], neighbors: Seq[(Long, Double)], partition: Long = 0, finished: Boolean = false)
 
 object NND {
   def buildGraph(rdd: RDD[(Long, Node)], noNeighbors: Int, maxIterations: Int, earlyTermination: Double, sampleRate: Double, bucketsPerInstance: Int): RDD[(Long, NodeWithNeighbors)] = {
@@ -68,6 +68,7 @@ object NND {
 
     // initialGraph
     val nodes = rdd
+      .filter{case (_, node) => !node.finished}
       .map{case (id, node) => (id, node.features, node.partition)}
       .map {
         case (id, features, partition) => KeyVertexWithFeatures(id, features, partition)
