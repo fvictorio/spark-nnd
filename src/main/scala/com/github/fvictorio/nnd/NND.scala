@@ -274,7 +274,7 @@ object NND {
     val result = rdd
       .leftOuterJoin(graphRDD)
       .mapValues{case (node, neighbors) => {
-        NodeWithNeighbors(node.features, node.label, neighbors.orNull, node.partition)
+        NodeWithNeighbors(node.features, node.label, neighbors.orNull, node.partition, node.finished)
       }}
 
     graph.unpersist()
