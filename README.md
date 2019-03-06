@@ -40,12 +40,17 @@ The new `neighbors` field is a sequence with the id and the similarity of each n
 ```scala
 import com.github.fvictorio.nnd.{NND, Node}
 ...
+// parameters
 val K = 10
 val maxIterations = 5
 val earlyTermination = 0.01
 val sampleRate = 1.0
 val bucketsPerInstance = 4
-val rdd: RDD[(Long, Node)] = ??? // build your input
+
+// get your input data
+val rdd: RDD[(Long, Node)] = ???
+
+// build the graph
 val result = NND.buildGraph(rdd, K, maxIterations, earlyTermination, sampleRate, bucketsPerInstance)
 ```
 
